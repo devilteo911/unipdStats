@@ -19,7 +19,7 @@ def login(username, password):
     driver.find_element_by_id("j_username_js").send_keys(username)
     driver.find_element_by_id("password").send_keys(password)
     driver.find_element_by_id("login_button_js").click()
-    time.sleep(1)
+    time.sleep(2)
     driver.find_element_by_id("gu_link_sceltacarriera_2293915").click()
     time.sleep(0.1)
     
@@ -31,18 +31,28 @@ def grade_scraping():
     time.sleep(0.1)
     driver.find_element_by_id("menu_link-navbox_studenti_auth/studente/Libretto/LibrettoHome").click()
     time.sleep(0.1)
-    cfu = np.array([])
-    grades = np.array([])
+    cfus, grades = np.array([]), np.array([])
     table =  driver.find_element_by_class_name("table-1-body")
 
     for row in table.find_elements_by_xpath(".//tr"):
-        cfus = row.find_elements_by_xpath(".//td[@class='cell-alignC libretto-verticalAlign'][2]")
+        cfus_elem = row.find_elements_by_xpath(".//td[@class='cell-alignC libretto-verticalAlign'][2]")
         grades_elem = row.find_elements_by_xpath(".//td[@class='cell-alignC libretto-verticalAlign'][5]")
-        cfu = np.append(cfu, [cfu.text for cfu in cfus])
-        grades = np.append(grades, [grade.text.split(' -')[0] for grade in grades_elem])
+        for cfu, grade in zip(cfus_elem, grades_elem):
+            trimmed_grade = grade.text.split(' -')[0]
+            # If 30L
+            trimmed_grade = trimmed_grade.split('L')[0]
+            if trimmed_grade == '':
+                continue
+            try:
+                trimmed_grade = int(trimmed_grade)
+                grades = np.append(grades, trimmed_grade)
+                trimmed_cfu = int(cfu.text)
+                cfus = np.append(cfus, trimmed_cfu)
+            except Exception:
+                continue
         #print([(cfu.text,  grade.text.split(' -')[0]) for cfu, grade in zip(cfus, grades_elem)])
 
-    return cfu, grades
+    return grades.T, cfus.T
 
 def weighted_mean(grades, weights):
     return np.dot(grades, weights)/np.sum(w)
@@ -70,9 +80,6 @@ if __name__ == '__main__':
     g, w = grade_scraping()
 
     print(g,w)
-
-    g = np.array([30, 30, 30, 30, 28, 30, 28, 28, 30, 25, 24, 30, 28])
-    w = np.array([6 if i < len(g)-1 else 12 for i in range(len(g))])
     curr_mean = weighted_mean(g,w)
     b_grade = np.round(base_degree_grade(curr_mean), decimals=2)
 
