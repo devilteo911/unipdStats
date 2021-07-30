@@ -2,84 +2,35 @@ import numpy as np
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
+from methods import *
+import os
 
-USERNAME = "YOUR EMAIL"
-PASSWORD = "YOUR PWD"
+# TO REPLACE WITH mail and pwd of unipd account
+if not os.path.exists("credentials.txt"):
+    USERNAME = input("Insert your email: ")
+    PASSWORD = input("Insert your pwd: ")
+    with open(os.getcwd() + '/credentials.txt', 'w') as f:
+        f.write(USERNAME)
+        f.write(',')
+        f.write(PASSWORD)
+        f.close
 
-
-driver = webdriver.Firefox()
-
-def login(username, password):
-    driver.get("https://uniweb.unipd.it/Home.do")
-    time.sleep(0.1)
-    driver.find_element_by_id("hamburger").click()
-    time.sleep(0.1)
-    driver.find_element_by_id("menu_link-navbox_account_auth/Logon").click()
-    time.sleep(3)
-    driver.find_element_by_id("j_username_js").send_keys(username)
-    driver.find_element_by_id("password").send_keys(password)
-    driver.find_element_by_id("login_button_js").click()
-    time.sleep(2)
-    driver.find_element_by_id("gu_link_sceltacarriera_2293915").click()
-    time.sleep(0.1)
-    
-
-def grade_scraping():
-    driver.find_element_by_id("hamburger").click()
-    time.sleep(0.1)
-    driver.find_element_by_id("menu_link-navbox_studenti_Home").click()
-    time.sleep(0.1)
-    driver.find_element_by_id("menu_link-navbox_studenti_auth/studente/Libretto/LibrettoHome").click()
-    time.sleep(0.1)
-    cfus, grades = np.array([]), np.array([])
-    table =  driver.find_element_by_class_name("table-1-body")
-
-    for row in table.find_elements_by_xpath(".//tr"):
-        cfus_elem = row.find_elements_by_xpath(".//td[@class='cell-alignC libretto-verticalAlign'][2]")
-        grades_elem = row.find_elements_by_xpath(".//td[@class='cell-alignC libretto-verticalAlign'][5]")
-        for cfu, grade in zip(cfus_elem, grades_elem):
-            trimmed_grade = grade.text.split(' -')[0]
-            # If 30L
-            trimmed_grade = trimmed_grade.split('L')[0]
-            if trimmed_grade == '':
-                continue
-            try:
-                trimmed_grade = int(trimmed_grade)
-                grades = np.append(grades, trimmed_grade)
-                trimmed_cfu = int(cfu.text)
-                cfus = np.append(cfus, trimmed_cfu)
-            except Exception:
-                continue
-        #print([(cfu.text,  grade.text.split(' -')[0]) for cfu, grade in zip(cfus, grades_elem)])
-
-    return grades.T, cfus.T
-
-def weighted_mean(grades, weights):
-    return np.dot(grades, weights)/np.sum(w)
-
-def base_degree_grade(mean, rate=3.666666667):
-    return mean * rate
-
-def incremental_points(b_grade, flag):
-    if flag == 'e':
-        return np.round((b_grade*8)/100, decimals=3)
-    if flag == 'o':
-        return np.round((b_grade*6)/100, decimals=3)
-    if flag == 'b':
-        return np.round((b_grade*4)/100, decimals=3)
-    if flag == 'd':
-        return np.round((b_grade*2)/100, decimals=3)
-    else:
-        return 0
+else:
+    with open(os.getcwd() + '/credentials.txt', 'r') as f:
+        print(f.readline())
+        f.close()
 
 
 if __name__ == '__main__':
     
-    # logging in
-    login(USERNAME, PASSWORD)
-    g, w = grade_scraping()
+    # Loading the driver
+    driver = webdriver.Firefox()
 
-    print(g,w)
+    # logging in
+    login(USERNAME, PASSWORD, driver)
+    # returns the grades and the cfus (a.k.a the weights of the exams)
+    g, w = grade_scraping(driver)
+    # calculating the weighted mean and the base degree grade
     curr_mean = weighted_mean(g,w)
     b_grade = np.round(base_degree_grade(curr_mean), decimals=2)
 

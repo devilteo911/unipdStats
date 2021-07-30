@@ -554,9 +554,63 @@ console.warn: SearchSettings: "get: No settings file exists, new profile?" (new 
 console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Matteo\\AppData\\Local\\Temp\\rust_mozprofileRpu5EY\\search.json.mozlz4", (void 0)))
 1627656393569	Marionette	INFO	Listening on port 54547
 1627656393852	Marionette	WARN	TLS certificate errors will be ignored for this session
-1627656465136	geckodriver	INFO	Listening on 127.0.0.1:54717
-1627656468179	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Matteo\\AppData\\Local\\Temp\\rust_mozprofile6ogaow"
-1627656468644	Marionette	INFO	Marionette enabled
-console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Matteo\\AppData\\Local\\Temp\\rust_mozprofile6ogaow\\search.json.mozlz4", (void 0)))
-1627656472120	Marionette	INFO	Listening on port 54729
-1627656472357	Marionette	WARN	TLS certificate errors will be ignored for this session
+console.error: services.settings: 
+  main/doh-providers Signature failed  InvalidSignatureError: Invalid content signature (main/doh-providers)
+console.error: services.settings: 
+  main/doh-providers local data was corrupted
+console.warn: services.settings: main/doh-providers Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-config Signature failed  InvalidSignatureError: Invalid content signature (main/doh-config)
+console.error: services.settings: 
+  main/doh-config local data was corrupted
+console.warn: services.settings: main/doh-config Signature verified failed. Retry from scratch
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+1627661451573	Marionette	INFO	Stopped listening on port 54547
+fied failed. Retry from scratch
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+1627661452544	Marionette	INFO	Stopped listening on port 54729
+:\\Users\\Matteo\\AppData\\Local\\Temp\\rust_mozprofileOnmjtm\\search.json.mozlz4", (void 0)))
+1627657521205	Marionette	INFO	Listening on port 55293
+1627657521727	Marionette	WARN	TLS certificate errors will be ignored for this session
+1627657533496	Marionette	INFO	Stopped listening on port 55293
+1627657536214	geckodriver	INFO	Listening on 127.0.0.1:55365
+1627657539272	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Matteo\\AppData\\Local\\Temp\\rust_mozprofile4KRBRM"
+1627657539894	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Matteo\\AppData\\Local\\Temp\\rust_mozprofile4KRBRM\\search.json.mozlz4", (void 0)))
+1627657543155	Marionette	INFO	Listening on port 55374
+1627657543461	Marionette	WARN	TLS certificate errors will be ignored for this session
+console.error: services.settings: 
+  main/doh-providers Signature failed  InvalidSignatureError: Invalid content signature (main/doh-providers)
+console.error: services.settings: 
+  main/doh-providers local data was corrupted
+console.warn: services.settings: main/doh-providers Signature verified failed. Retry from scratch
+console.error: services.settings: 
+  main/doh-config Signature failed  InvalidSignatureError: Invalid content signature (main/doh-config)
+console.error: services.settings: 
+  main/doh-config local data was corrupted
+console.warn: services.settings: main/doh-config Signature verified failed. Retry from scratch
+console.log: WebExtensions: reset-default-search: starting.
+console.log: WebExtensions: reset-default-search: No addons in our list are installed.
+1627661453417	Marionette	INFO	Stopped listening on port 55374
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1627662592209	geckodriver	INFO	Listening on 127.0.0.1:59543
+1627662608595	geckodriver	INFO	Listening on 127.0.0.1:59575
