@@ -1,28 +1,44 @@
 import numpy as np
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+import rsa
 import time
 from methods import *
 import os
+
+
+# save and load the public and private keys
+# it is suggested to keep the keys in a secure
+# folder so to not expose them
+if not os.path.exists("keys/public.pem"):
+    store_keys(num=256)
+pub_key, priv_key = load_keys()
 
 # TO REPLACE WITH mail and pwd of unipd account
 if not os.path.exists("credentials.txt"):
     USERNAME = input("Insert your email: ")
     PASSWORD = input("Insert your pwd: ")
-    with open(os.getcwd() + '/credentials.txt', 'w') as f:
+
+    # encrypting the credentials
+    USERNAME = rsa.encrypt(USERNAME.encode(), pub_key)
+    PASSWORD = rsa.encrypt(PASSWORD.encode(), pub_key)
+
+    with open(os.getcwd() + '/credentials.txt', 'wb') as f:
         f.write(USERNAME)
-        f.write(',')
+        f.write('\n'.encode())
+        print('\n'.encode())
         f.write(PASSWORD)
         f.close
 
 else:
-    with open(os.getcwd() + '/credentials.txt', 'r') as f:
-        print(f.readline())
+    with open(os.getcwd() + '/credentials.txt', 'rb') as f:
+        USERNAME, PASSWORD = f.read().split(b'\n')
+        USERNAME = rsa.decrypt(USERNAME, priv_key).decode() + '@studenti.unipd.it'
+        PASSWORD = rsa.decrypt(PASSWORD, priv_key).decode()
         f.close()
 
-
 if __name__ == '__main__':
-    
+
     # Loading the driver
     driver = webdriver.Firefox()
 

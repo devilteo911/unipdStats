@@ -1,3 +1,39 @@
+import rsa
+import os
+import time
+import numpy as np
+
+def encrypt_credential(message, pub_key):
+    return rsa.encrypt(message.encode(), pub_key)
+
+def decrypt_credential(enc_message, priv_key):
+    return rsa.decrypt(enc_message, priv_key).encode()
+
+def store_keys(num=2048):
+    if not os.path.exists('keys'):
+        os.mkdir('keys')
+    pub_key, priv_key = rsa.newkeys(num)
+
+    pub = pub_key.save_pkcs1()
+    with open('keys/public.pem', 'w+') as f:
+        f.write(pub.decode())
+        f.close()
+
+    priv = priv_key.save_pkcs1()
+    with open('keys/private.pem', 'w+') as f:
+        f.write(priv.decode())
+        f.close()    
+
+def load_keys():
+    with open('keys/public.pem', 'r+') as f:
+        pub_key = f.read()
+        pub_key = rsa.PublicKey.load_pkcs1(pub_key)
+    with open('keys/private.pem', 'r+') as f1:
+        priv_key = f1.read()
+        priv_key = rsa.PrivateKey.load_pkcs1(priv_key)
+
+    return pub_key, priv_key
+
 def login(username, password, driver):
     driver.get("https://uniweb.unipd.it/Home.do")
     time.sleep(0.1)
@@ -44,7 +80,7 @@ def grade_scraping(driver):
     return grades.T, cfus.T
 
 def weighted_mean(grades, weights):
-    return np.dot(grades, weights)/np.sum(w)
+    return np.dot(grades, weights)/np.sum(weights)
 
 def base_degree_grade(mean, rate=3.666666667):
     return mean * rate
